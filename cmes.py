@@ -12,12 +12,12 @@ Calls	:	os, numpy, matplotlib, pandas
 Written	:	Jason P Byrne, STFC/RAL Space, Dec 2015 (jason.byrne@stfc.ac.uk)
 Revisions:
 2015-12-01 JPB : Working in accordance with sunpy project guidelines.
-2015-12-03 JPB	:	Adding hicactus function.
+2015-12-03 JPB	:	Adding hicact function.
 '''
 
 import os
-import numpy as np
 import pandas as pd
+import numpy as np
 import urllib2
 import config
 
@@ -58,7 +58,7 @@ def cdaw():
 		raise
 
 # spc = 'A' or 'B' for the Ahead or Behind spacecraft
-def hicactus(spc):
+def hicact(spc):
 	###
 	# Read in the HELCATS HI CACTUS CME list
 	try:
