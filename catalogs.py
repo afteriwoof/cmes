@@ -43,9 +43,9 @@ save(path=os.path.join(config.hicact_path,"hicact_b_speeds_hist"),verbose=True)
 
 # Histogram of STEREO-Ahead & Behind speeds
 plt.hist(v_a,bins=np.arange(0,max(v_a)+binwidth,binwidth),histtype='stepfilled',\
-	normed=False,color='b',label='Ahead')
+	normed=False,color='r',label='Ahead')
 plt.hist(v_b,bins=np.arange(0,max(v_b)+binwidth,binwidth),histtype='stepfilled',\
-	normed=False,color='r',alpha=0.5,label='Behind')
+	normed=False,color='b',alpha=0.5,label='Behind')
 plt.title("HICACTus CME Speeds")
 plt.xlabel("Speed [kms-1]")
 plt.ylabel("Count")
