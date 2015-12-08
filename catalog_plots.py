@@ -28,49 +28,59 @@ df_cdaw.describe()
 hicact_a_speeds = df_hicact_a[['v']]
 hicact_b_speeds = df_hicact_b[['v']]
 
-binwidth = 50
 # Histogram of STEREO-Ahead speeds
-v_a = np.array(df_hicact_a[['v']].astype('float'))
-plt.hist(v_a,bins=np.arange(0, max(v_a) + binwidth, binwidth))
-plt.title("HICACTus STEREO-Ahead")
-save(path=os.path.join(config.hicact_path,"hicact_a_speeds_hist"),verbose=True)
+def hicact_a_speeds():
+	binwidth = 50
+	v_a = np.array(df_hicact_a[['v']].astype('float'))
+	plt.hist(v_a,bins=np.arange(0, max(v_a) + binwidth, binwidth))
+	plt.title("HICACTus STEREO-Ahead")
+	save(path=os.path.join(config.hicact_path,"hicact_a_speeds_hist"),verbose=True)
+
+hicact_a_speeds()
 
 # Histogram of STEREO-Behind speeds
-v_b = np.array(df_hicact_b[['v']].astype('float'))
-plt.hist(v_b,bins=np.arange(0,max(v_b)+binwidth,binwidth))
-plt.title("HICACTus STEREO-Behind")
-save(path=os.path.join(config.hicact_path,"hicact_b_speeds_hist"),verbose=True)
+def hicact_b_speeds():
+	binwidth=1
+	v_b = np.array(df_hicact_b[['v']].astype('float'))
+	plt.hist(v_b,bins=np.arange(0,max(v_b)+binwidth,binwidth))
+	plt.title("HICACTus STEREO-Behind")
+	save(path=os.path.join(config.hicact_path,"hicact_b_speeds_hist"),verbose=True)
+
+hicact_b_speeds()
 
 # Histogram of STEREO-Ahead & Behind speeds
-plt.hist(v_a,bins=np.arange(0,max(v_a)+binwidth,binwidth),histtype='stepfilled',\
-	normed=False,color='r',label='Ahead')
-plt.hist(v_b,bins=np.arange(0,max(v_b)+binwidth,binwidth),histtype='stepfilled',\
-	normed=False,color='b',alpha=0.5,label='Behind')
-plt.title("HICACTus CME Speeds")
-plt.xlabel("Speed [kms-1]")
-plt.ylabel("Count")
-plt.legend(prop={'size':8})
-save(path=os.path.join(config.hicact_path,"hicact_speeds_hist"),verbose=True)
+def hicact_speeds():
+	plt.hist(v_a,bins=np.arange(0,max(v_a)+binwidth,binwidth),histtype='stepfilled',\
+		normed=False,color='r',label='Ahead')
+	plt.hist(v_b,bins=np.arange(0,max(v_b)+binwidth,binwidth),histtype='stepfilled',\
+		normed=False,color='b',alpha=0.5,label='Behind')
+	plt.title("HICACTus CME Speeds")
+	plt.xlabel("Speed [kms-1]")
+	plt.ylabel("Count")
+	plt.legend(prop={'size':8})
+	save(path=os.path.join(config.hicact_path,"hicact_speeds_hist"),verbose=True)
 
 # Scatterplot of STEREO-Ahead speeds against position angles
-plt.scatter(df_hicact_a.v,df_hicact_a.pa,s=80,facecolor='red',edgecolor='none',alpha=0.25)
-#plt.axhline(y=df_hicact_b.pa.min())
-#plt.axhline(y=df_hicact_b.pa.max())
-plt.xlim([0,2100])
-plt.title("HICACTus STEREO-Ahead")
-plt.xlabel("Speed [kms-1]")
-plt.ylabel("Position Angle [deg]")
-save(path=os.path.join(config.hicact_path,"hicact_a_speeds_pa"),verbose=True)
+def hicact_a_speeds_pa():
+	plt.scatter(df_hicact_a.v,df_hicact_a.pa,s=80,facecolor='red',edgecolor='none',alpha=0.25)
+	#plt.axhline(y=df_hicact_b.pa.min())
+	#plt.axhline(y=df_hicact_b.pa.max())
+	plt.xlim([0,2100])
+	plt.title("HICACTus STEREO-Ahead")
+	plt.xlabel("Speed [kms-1]")
+	plt.ylabel("Position Angle [deg]")
+	save(path=os.path.join(config.hicact_path,"hicact_a_speeds_pa"),verbose=True)
 
 # Scatterplot of STEREO-Behind speeds against position angles
-plt.scatter(df_hicact_b.v,df_hicact_b.pa,s=80,edgecolor='none',alpha=0.25)
-#plt.axhline(y=df_hicact_b.pa.min())
-#plt.axhline(y=df_hicact_b.pa.max())
-plt.xlim([0,2100])
-plt.title("HICACTus STEREO-Behind")
-plt.xlabel("Speed [kms-1]")
-plt.ylabel("Position Angle [deg]")
-save(path=os.path.join(config.hicact_path,"hicact_b_speeds_pa"),verbose=True)
+def hicact_b_speeds_pa():
+	plt.scatter(df_hicact_b.v,df_hicact_b.pa,s=80,edgecolor='none',alpha=0.25)
+	#plt.axhline(y=df_hicact_b.pa.min())
+	#plt.axhline(y=df_hicact_b.pa.max())
+	plt.xlim([0,2100])
+	plt.title("HICACTus STEREO-Behind")
+	plt.xlabel("Speed [kms-1]")
+	plt.ylabel("Position Angle [deg]")
+	save(path=os.path.join(config.hicact_path,"hicact_b_speeds_pa"),verbose=True)
 
 # Scatterplot of STEREO-Ahead & Behind speeds against position angles
 def hicact_speeds_pa():
@@ -111,4 +121,11 @@ def hicact_speeds_datetime():
 
 hicact_speeds_datetime()
 
+def fourier_speeds():
+	from scipy.fftpack import fft
+	yf = fft(df_hicact_b.v)
+	plt.scatter(df_hicact_b.v,yf)
+	#plt.show()
+
+fourier_speeds()
 
