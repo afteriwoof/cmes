@@ -73,33 +73,19 @@ plt.ylabel("Position Angle [deg]")
 save(path=os.path.join(config.hicact_path,"hicact_b_speeds_pa"),verbose=True)
 
 # Scatterplot of STEREO-Ahead & Behind speeds against position angles
-plt.figure(num=None,figsize=(6,8),dpi=80,facecolor='w',edgecolor='k')
-a,=plt.scatter(df_hicact_a.v,df_hicact_a.pa,s=20,facecolor='red',edgecolor='none',alpha=0.25)
-b,=plt.scatter(df_hicact_b.v,df_hicact_b.pa,s=20,facecolor='blue',edgecolor='none',alpha=0.25)
-plt.xlim([0,2100])
-plt.ylim([0,360])
-plt.title("HICACTus STEREO CMEs")
-plt.xlabel("Speed [kms-1]")
-plt.ylabel("Position Angle [deg]")
-plt.legend([a,b],['Ahead','Behind'],prop={'size':8})
-save(path=os.path.join(config.hicact_path,"hicact_speeds_pa"),verbose=True)
-# Histogram of STEREO-Behind speeds split by position angle ranges
-#def pa_hist(df,pa1,pa2):
-#	df = df[(df.pa >= pa1) & (df.pa < pa2)]
-#	plt.hist(np.array(df.v),bins=np.arange(0,max(df.v)+binwidth,binwidth))
-#	plt.title("HICACTus STEREO-Behind : PA %d-%d" %(pa1,pa2))
-#	plt.show()
-#
-#pa1=225
-#n=5
-#pa2=pa1+n
-#for i in np.arange(100/n):
-#	pa1 += n
-#	pa2 += n
-#	pa_hist(df_hicact_b,pa1,pa2)
+def hicact_speeds_pa():
+	plt.figure(num=None,figsize=(6,8),dpi=80,facecolor='w',edgecolor='k')
+	a = plt.scatter(df_hicact_a.v,df_hicact_a.pa,s=20,facecolor='red',edgecolor='none',alpha=0.25)
+	b = plt.scatter(df_hicact_b.v,df_hicact_b.pa,s=20,facecolor='blue',edgecolor='none',alpha=0.25)
+	plt.xlim([0,2100])
+	plt.ylim([0,360])
+	plt.title("HICACTus STEREO CMEs")
+	plt.xlabel("Speed [kms-1]")
+	plt.ylabel("Position Angle [deg]")
+	plt.legend([a,b],['Ahead','Behind'],prop={'size':8})
+	save(path=os.path.join(config.hicact_path,"hicact_speeds_pa"),verbose=True)
 
-
-
+hicact_speeds_pa()
 
 '''
 wp3_speeds=df_hicat[['FP speed [kms-1]','SSE speed [kms-1]','HM speed [kms-1]']]
@@ -108,5 +94,21 @@ save(path=os.path.join(config.hicat_path,"wp3_speeds_hist"),verbose=True)
 '''
 
 # Split speeds by year
+def hicact_speeds_datetime():
+	import datetime
+	time_format = "%Y/%m/%d %H:%M"
+	datetimes_a = np.array([datetime.datetime.strptime(x,time_format) for x in df_hicact_a.starttime])
+	datetimes_b = np.array([datetime.datetime.strptime(x,time_format) for x in df_hicact_b.starttime])
+	plt.figure(num=None,figsize=(6,8),dpi=80,facecolor='w',edgecolor='k')
+	a = plt.scatter(df_hicact_a.v,datetimes_a,s=20,facecolor='red',edgecolor='none',alpha=0.25)
+	b = plt.scatter(df_hicact_b.v,datetimes_b,s=20,facecolor='blue',edgecolor='none',alpha=0.25)
+	plt.xlim([0,2100])
+	plt.title("HICACTus STEREO CMEs")
+	plt.xlabel("Speed [kms-1]")
+	plt.ylabel("Time")
+	plt.legend([a,b],['Ahead','Behind'],prop={'size':8})
+	save(path=os.path.join(config.hicact_path,"hicact_speeds_datetimes"),verbose=True)
+
+hicact_speeds_datetime()
 
 
