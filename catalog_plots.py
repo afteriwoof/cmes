@@ -24,9 +24,7 @@ df_cdaw.describe()
 #save(path=os.path.join(config.wp3_path,"cdaw_cme_catalog/cdaw_hist"),verbose=True)
 #plt.show()
 
-
-hicact_a_speeds = df_hicact_a[['v']]
-hicact_b_speeds = df_hicact_b[['v']]
+binwidth=50 #local variable
 
 # Histogram of STEREO-Ahead speeds
 def hicact_a_speeds():
@@ -49,7 +47,7 @@ def hicact_b_speeds():
 hicact_b_speeds()
 
 # Histogram of STEREO-Ahead & Behind speeds
-def hicact_speeds():
+def hicact_speeds(v_a,v_b):
 	plt.hist(v_a,bins=np.arange(0,max(v_a)+binwidth,binwidth),histtype='stepfilled',\
 		normed=False,color='r',label='Ahead')
 	plt.hist(v_b,bins=np.arange(0,max(v_b)+binwidth,binwidth),histtype='stepfilled',\
@@ -59,6 +57,8 @@ def hicact_speeds():
 	plt.ylabel("Count")
 	plt.legend(prop={'size':8})
 	save(path=os.path.join(config.hicact_path,"hicact_speeds_hist"),verbose=True)
+
+hicact_speeds(df_hicact_a.v, df_hicact_b.v)
 
 # Scatterplot of STEREO-Ahead speeds against position angles
 def hicact_a_speeds_pa():
@@ -71,6 +71,8 @@ def hicact_a_speeds_pa():
 	plt.ylabel("Position Angle [deg]")
 	save(path=os.path.join(config.hicact_path,"hicact_a_speeds_pa"),verbose=True)
 
+hicact_a_speeds_pa()
+
 # Scatterplot of STEREO-Behind speeds against position angles
 def hicact_b_speeds_pa():
 	plt.scatter(df_hicact_b.v,df_hicact_b.pa,s=80,edgecolor='none',alpha=0.25)
@@ -81,6 +83,8 @@ def hicact_b_speeds_pa():
 	plt.xlabel("Speed [kms-1]")
 	plt.ylabel("Position Angle [deg]")
 	save(path=os.path.join(config.hicact_path,"hicact_b_speeds_pa"),verbose=True)
+
+hicact_b_speeds_pa()
 
 # Scatterplot of STEREO-Ahead & Behind speeds against position angles
 def hicact_speeds_pa():
