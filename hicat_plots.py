@@ -134,11 +134,11 @@ def hicat_speeds_pa(df_hicat):
 	plt.legend([fp,sse,hm],['Fixed-Phi','Self-Similar Exp.','Harmonic Mean'],prop={'size':ledge_sz})
 	save(path=os.path.join(config.hicat_path,"hicat_speeds_pa"),verbose=True)
 
-'''
-wp3_speeds=df_hicat[['FP speed [kms-1]','SSE speed [kms-1]','HM speed [kms-1]']]
-wp3_speeds.plot(kind='hist',stacked=True,bins=100)
-save(path=os.path.join(config.hicat_path,"wp3_speeds_hist"),verbose=True)
-'''
+def hicat_stacked_speeds():
+	wp3_speeds=df_hicat[['FP speed [kms-1]','SSE speed [kms-1]','HM speed [kms-1]']]
+	wp3_speeds.plot(kind='hist',stacked=True,bins=100)
+	save(path=os.path.join(config.hicat_path,"hicat_speeds_stacked"),verbose=True)
+
 
 # Split speeds by year
 def hicat_speeds_datetime(df_hicat):
@@ -161,10 +161,12 @@ def hicat_speeds_datetime(df_hicat):
 	plt.legend([fp,sse,hm],['FP','SSE','HM'],prop={'size':ledge_sz},loc=2)
 	save(path=os.path.join(config.hicat_path,"hicat_speeds_datetimes"),verbose=True)
 
-
+# Run All
 def run_all():
 	df_a = df_hicat[(df_hicat['SC']=='A')]
 	df_b = df_hicat[(df_hicat['SC']=='B')]
+
+	hicat_stacked_speeds()
 	
 	hi_geom_speeds(df_hicat[["FP speed [kms-1]"]],tit='FixedPhi')
 	
