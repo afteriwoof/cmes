@@ -49,7 +49,7 @@ speeds_xlim = [0,2100]
 speeds_xlabel = "Speed ($km s^{-1}$)"
 
 # Histogram of STEREO-Ahead/Behind speeds
-def hi_spc_speeds(v,**kwargs):
+def hi_geom_speeds(v,**kwargs):
 	if kwargs:
 		print kwargs
 	if 'spc' in kwargs:
@@ -62,24 +62,36 @@ def hi_spc_speeds(v,**kwargs):
 		tit = ""
 	v = np.array(v.astype('float'))
 	plt.hist(v,bins=np.arange(0, max(v) + binwidth, binwidth),color=colors[spc])
-	plt.title("%s STEREO %s" %(tit.upper(),labels[spc]))
-	plt.xlim(speeds_xlim)
+	plt.title("%s STEREO %s" %(tit,labels[spc]))
+	#plt.xlim(speeds_xlim)
 	plt.xlabel(speeds_xlabel)
 	save(path=os.path.join(config.hicat_path,"%s_speeds_hist_%s" %(tit,labels[spc])),verbose=True)
 
-
 # Histogram of STEREO-Ahead & Behind speeds
-def hicat_speeds(v_a,v_b):
+def hicat_speeds(v_a,v_b,**kwargs):
+	if 'tit' in kwargs:
+		tit = kwargs['tit']
+	else:
+		tit = ""
+	print max(v_a)
+	print max(v_b)
 	plt.hist(v_a,bins=np.arange(0,max(v_a)+binwidth,binwidth),histtype='stepfilled',\
 		normed=False,color='r',label='Ahead')
 	plt.hist(v_b,bins=np.arange(0,max(v_b)+binwidth,binwidth),histtype='stepfilled',\
 		normed=False,color='b',alpha=0.5,label='Behind')
-	plt.title("HICACTus CME Speeds")
-	plt.xlim(speeds_xlim)
+	plt.title("HICAT CME Speeds %s" %tit)
+	#plt.xlim(speeds_xlim)
 	plt.xlabel(speeds_xlabel)
 	plt.ylabel("Count")
 	plt.legend(prop={'size':8})
 	save(path=os.path.join(config.hicat_path,"hicat_speeds_hist"),verbose=True)
+
+df_a = df_hicat[(df_hicat['SC']=='A')]
+df_b = df_hicat[(df_hicat['SC']=='B')]
+v_a = df_a[['FP speed [kms-1]']].values
+v_b = df_b[['FP speed [kms-1]']].values
+hicat_speeds(v_a, v_b, tit="FixedPhi")
+#hicat_speeds(df_a[['FP speed [kms-1]']], df_b[['FP speed [kms-1]']], tit="FixedPhi")
 
 # Scatterplot of STEREO-Ahead/Behind speeds against position angles
 def hicat_spc_speeds_pa(df_hicat,spc):
@@ -127,22 +139,9 @@ def hicat_speeds_datetime():
 	plt.legend([a,b],['Ahead','Behind'],prop={'size':8})
 	save(path=os.path.join(config.hicat_path,"hicat_speeds_datetimes"),verbose=True)
 
-def fourier_speeds():
-	from scipy.fftpack import fft
-	yf = fft(df_hicat_b.v)
-	plt.scatter(df_hicat_b.v,yf)
-	#plt.show()
 
 def run_all():
-	hi_spc_speeds(df_hicat_a.v,spc=0,tit='hicat')
-	hi_spc_speeds(df_hicat_b.v,spc=1,tit='hicat')
-	hicat_speeds(df_hicat_a.v, df_hicat_b.v)
-	hicat_spc_speeds_pa(df_hicat_a,0)
-	hicat_spc_speeds_pa(df_hicat_b,1)
-	hicat_speeds_pa()
-	hicat_speeds_datetime()
-
-	hi_spc_speeds(df_hicat[["FP speed [kms-1]"]],tit='hicat',ledge=')
+	hi_geom_speeds(df_hicat[["FP speed [kms-1]"]],tit='FixedPhi')
 
 
 
