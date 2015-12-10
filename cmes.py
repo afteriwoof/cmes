@@ -90,6 +90,7 @@ def hicact(spc):
 
 		raise
 
+
 def hicat():
 	# Read in the HELCATS HI Observational CME list
 	try:
@@ -104,9 +105,10 @@ def hicat():
 			'HM speed [kms-1]','HM speed Err [kms-1]','HM Phi [deg]','HM Phi Err [deg]',\
                         'HM HEEQ Long [deg]','HM HEEQ Lat [deg]','HM Carr Long [deg]','HM Launch [UTC]']
 
+		fl = 'HCME_WP3_V03.vot'
 		fl_format = 'votable'
 		from astropy.table import Table
-		t = Table.read(os.path.join(config.hicat_path,'HCME_WP3_V02.vot'),format=fl_format)
+		t = Table.read(os.path.join(config.hicat_path,fl),format=fl_format)
 		t = Table(t,names=cols)
 		return pd.DataFrame(np.array(t),columns=cols)
 
