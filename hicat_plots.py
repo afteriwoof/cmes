@@ -158,7 +158,7 @@ def hicat_speeds_datetime(df_hicat):
 	plt.title("HICAT CMEs")
 	plt.ylabel(speeds_label)
 	plt.xlabel("Time")
-	plt.legend([fp,sse,hm],['FP','SSE','HM'],prop={'size':ledge_sz},loc=2)
+	plt.legend([fp,sse,hm],['Fixed-Phi','Self-Similar Exp.','Harmonic Mean'],prop={'size':ledge_sz},loc=2)
 	save(path=os.path.join(config.hicat_path,"hicat_speeds_datetimes"),verbose=True)
 
 # Run All

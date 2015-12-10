@@ -94,8 +94,8 @@ def hicact(spc):
 def hicat():
 	# Read in the HELCATS HI Observational CME list
 	try:
-		#f = urllib2.urlopen("http://www.helcats-fp7.eu/catalogues/data/HCME_WP3_V02.txt")
-		#f = open(os.path.join(config.hicat_path,'HCME_WP3_V02.txt'),'r')
+		#f = urllib2.urlopen("http://www.helcats-fp7.eu/catalogues/data/HCME_WP3_V03.txt")
+		#f = open(os.path.join(config.hicat_path,'HCME_WP3_V03.txt'),'r')
 
 		cols = ['ID','Date [UTC]','SC','L-N','PA-N [deg]','L-S','PA-S [deg]','Quality','PA-fit',\
 			'FP speed [kms-1]','FP speed Err [kms-1]','FP Phi [deg]','FP Phi Err [deg]',\
