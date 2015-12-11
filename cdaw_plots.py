@@ -39,8 +39,6 @@ df_cdaw = cdaw().convert_objects(convert_numeric=True)
 
 # global variables
 binwidth=50 
-colors = ['r','b','grey']
-labels = ['Ahead','Behind','']
 speeds_lim = [0,3000]
 speeds_label = "Speed ($km s^{-1}$)"
 ledge_sz = 10
@@ -64,18 +62,31 @@ def cdaw_hists(df_cdaw,cols):
 	plt.ylabel(speeds_label)
 	plt.title("CDAW LASCO CME Catalog")
 
-# Histogram of STEREO-Ahead/Behind speeds
+# Histograms of CDAW CME position angles
+def cdaw_pa(df_cdaw):
+	binwidth=5
+	plt.figure(num=None,figsize=(8,10),dpi=80,facecolor='w',edgecolor='k')
+	plt.subplot(211)
+	plt.hist(df_cdaw.cpa.values,bins=np.arange(0,max(df_cdaw.cpa)+binwidth,binwidth),normed=False)
+	plt.xlim([0,360])
+	plt.xlabel("Position Angle ($deg.$)")
+	plt.ylabel("Count")
+	plt.title("CDAW CMEs Central Position Angle")
+	plt.subplot(212)
+	plt.hist(df_cdaw.mpa.values,bins=np.arange(0,max(df_cdaw.mpa)+binwidth,binwidth),normed=False)
+	plt.xlim([0,360])
+	plt.xlabel("Position Angle ($deg.$)")
+	plt.ylabel("Count")
+	plt.title("CDAW CMEs Measured Position Angle")
+	plt.tight_layout()
+	save(path=os.path.join(config.cdaw_path,"cdaw_pa"),verbose=True)
+
+cdaw_pa(df_cdaw)
+
+# Histogram of CDAW linear speeds
 def hi_geom_speeds(v,**kwargs):
 	if kwargs:
 		print kwargs
-	if 'spc' in kwargs:
-		spc = kwargs['spc']
-	else:
-		spc = -1
-	if 'tit' in kwargs:
-		tit = kwargs['tit']
-	else:
-		tit = ""
 	v = np.array(v.astype('float'))
 	plt.hist(v,bins=np.arange(0, max(v) + binwidth, binwidth),color=colors[spc])
 	plt.title("%s STEREO %s" %(tit,labels[spc]))

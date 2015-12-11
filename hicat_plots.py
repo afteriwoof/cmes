@@ -14,7 +14,7 @@ Calls   :       os, numpy, matplotlib, pandas
 		config, savefig, cmes
 Written :       Jason P Byrne, STFC/RAL Space, Dec 2015 (jason.byrne@stfc.ac.uk)
 Revisions:
-2015-12-08 JPB : 
+2015-12-11 JPB : Adding hicat_pa function. 
 '''
 
 import os
@@ -66,6 +66,7 @@ def hi_geom_speeds(v,**kwargs):
 
 # Histogram of STEREO-Ahead & Behind speeds
 def hicat_all_speeds(*args,**kwargs):
+	# input the speeds from Ahead & Behind of each of the FP, SSE, HM geometrical fittings.
 	fp_a = args[0]
 	fp_b = args[1]
 	sse_a = args[2]
@@ -97,8 +98,38 @@ def hicat_all_speeds(*args,**kwargs):
         plt.xlim(speeds_lim)
         plt.xlabel(speeds_label)
         plt.ylabel("Count")
+	plt.tight_layout()
         save(path=os.path.join(config.hicat_path,"hicat_speeds_hist"),verbose=True)
 
+# Histogram of STEREO-Ahead & Behind CME counts against position angles
+def hicat_pa(df_a,df_b):
+	binwidth = 5
+	plt.figure(num=None,figsize=(8,10),dpi=80,facecolor='w',edgecolor='k')
+	plt.subplot(211)
+	pa_a = (df_a["PA-N [deg]"].values+df_a["PA-S [deg]"].values)/2
+	pa_b = (df_b["PA-N [deg]"].values+df_b["PA-S [deg]"].values)/2
+	pa_all = np.append(pa_a,pa_b)
+	plt.hist(pa_all,bins=np.arange(0,max(pa_all)+binwidth,binwidth),normed=False)
+	plt.xlim([0,360])
+	plt.xlabel("Position Angle ($deg.$)")
+	plt.ylabel("Count")
+	plt.title("HICAT CMEs Central Position Angle")
+	plt.text(30,90,r'$\mu=%d$' % np.mean(pa_a))
+        plt.text(210,90,r'$\mu=%d$' % np.mean(pa_b))
+	plt.subplot(212)
+	pa_a = df_a["PA-fit"].values
+	pa_b = df_b["PA-fit"].values
+	pa_all = np.append(pa_a,pa_b)
+	plt.hist(pa_all,bins=np.arange(0,max(pa_all)+binwidth,binwidth),normed=False)
+        plt.xlim([0,360])
+        plt.xlabel("Position Angle ($deg.$)")
+        plt.ylabel("Count")
+	plt.title("HICAT CMEs Fitted Position Angle")
+	plt.text(30,65,r'$\mu=%d$' % np.mean(pa_a))
+	plt.text(210,65,r'$\mu=%d$' % np.mean(pa_b))
+	plt.tight_layout()
+	save(path=os.path.join(config.hicat_path,"hicat_pa"),verbose=True)
+#Do a means test on the pa???
 
 # Scatterplot of STEREO-Ahead/Behind speeds against position angles
 def hicat_spc_speeds_pa(df_hicat,spc):
@@ -166,6 +197,8 @@ def run_all():
 	df_a = df_hicat[(df_hicat['SC']=='A')]
 	df_b = df_hicat[(df_hicat['SC']=='B')]
 
+	hicat_pa(df_a,df_b)
+
 	hicat_stacked_speeds()
 	
 	hi_geom_speeds(df_hicat[["FP speed [kms-1]"]],tit='FixedPhi')
@@ -174,9 +207,9 @@ def run_all():
 	hicat_spc_speeds_pa(df_b,1)
 	hicat_speeds_pa(df_hicat)
 
-	hicat_all_speeds(df_a[['FP speed [kms-1]']].values, df_b[['FP speed [kms-1]']].values,\
-                df_a[['SSE speed [kms-1]']].values, df_b[['SSE speed [kms-1]']].values,\
-                df_a[['HM speed [kms-1]']].values, df_b[['HM speed [kms-1]']].values,\
+	hicat_all_speeds(df_a['FP speed [kms-1]'].values, df_b['FP speed [kms-1]'].values,\
+                df_a['SSE speed [kms-1]'].values, df_b['SSE speed [kms-1]'].values,\
+                df_a['HM speed [kms-1]'].values, df_b['HM speed [kms-1]'].values,\
                 tit=["Fixed Phi","Self-Similar Expansion","Harmonic Mean"])
 
 	hicat_speeds_datetime(df_hicat)
