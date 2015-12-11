@@ -39,7 +39,7 @@ df_cdaw = cdaw().convert_objects(convert_numeric=True)
 
 # global variables
 binwidth=50 
-speeds_lim = [0,3000]
+speeds_lim = [0,4000]
 speeds_label = "Speed ($km s^{-1}$)"
 ledge_sz = 10
 
@@ -82,6 +82,26 @@ def cdaw_pa():
 	plt.tight_layout()
 	save(path=os.path.join(config.cdaw_path,"cdaw_pa"),verbose=True)
 
+# Scatterplot of CDAW speeds against position angles
+def cdaw_speeds_pa():
+	plt.figure(figsize=(10,8),dpi=80,facecolor='w')
+	#lin = plt.scatter(df_cdaw.lin_speed,df_cdaw.mpa,s=10,facecolor='red',\
+	#	edgecolor='none',alpha=0.3)
+	#q_i = plt.scatter(df_cdaw.quad_speed_init,df_cdaw.mpa,s=10,facecolor='red',\
+	#	edgecolor='none',alpha=0.3)
+	q_f = plt.scatter(df_cdaw.quad_speed_final,df_cdaw.mpa,s=10,facecolor='blue',\
+		edgecolor='none',alpha=0.3)
+	plt.xlim([0,3500])
+	plt.ylim([0,360])
+	plt.title("CDAW LASCO CME Catalog")
+	plt.xlabel(speeds_label)
+	plt.ylabel("Measured Position Angle ($deg.$)")
+	#plt.legend([lin,q_i,q_f],['Linear','Quad. (init.)','Quad. (final)'],prop={'size':ledge_sz})
+	#plt.legend([lin,q_f],['Linear','Quad. (final)'],prop={'size':ledge_sz})
+	plt.legend([q_f],['Quad. (final)'],prop={'size':ledge_sz})
+	save(path=os.path.join(config.cdaw_path,"cdaw_speeds_pa"),verbose=True)
+
+cdaw_speeds_pa()
 
 # Histogram of CDAW linear speeds
 def hi_geom_speeds(v,**kwargs):
