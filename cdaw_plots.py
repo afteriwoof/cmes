@@ -49,21 +49,22 @@ labels_hist = ['Central PA','Measurement PA','Ang. Width','Linear Speed','Quad. 
 cols_boxplot = ['lin_speed','quad_speed_init','quad_speed_final','quad_speed_20']
 labels_boxplot = ['Linear Speed','Quad. Speed (initial)','Quad. Speed (final)','Quad. Speed (20 R_Sun)']
 # Histograms of all CDAW parameters
-def cdaw_hists(df_cdaw,cols):
-	fig = plt.figure(1,figsize=(5,5))
-	df_cdaw.hist(column=cols_hist,bins=100,grid=False)
-	plt.ylabel(speeds_label)
-	plt.title("CDAW LASCO CME Catalog")
+def cdaw_hists():
+	fig = plt.figure(1,figsize=(20,20))
+	df_cdaw.hist(column=cols_hist,bins=50,grid=False)
+	save(path=os.path.join(config.cdaw_path,"cdaw_hist"),verbose=True)
 	#boxplot
-	fig = plt.figure(2,figsize=(5,5))
+	fig = plt.figure(2,figsize=(9,6))
 	ax = fig.add_subplot(111)
 	df_cdaw.boxplot(column=cols_boxplot,grid=False)
 	ax.set_xticklabels(labels_boxplot)
 	plt.ylabel(speeds_label)
 	plt.title("CDAW LASCO CME Catalog")
+	plt.tight_layout()
+	save(path=os.path.join(config.cdaw_path,"cdaw_speeds_boxplot"),verbose=True)
 
 # Histograms of CDAW CME position angles
-def cdaw_pa(df_cdaw):
+def cdaw_pa():
 	binwidth=5
 	plt.figure(num=None,figsize=(8,10),dpi=80,facecolor='w',edgecolor='k')
 	plt.subplot(211)
@@ -81,7 +82,6 @@ def cdaw_pa(df_cdaw):
 	plt.tight_layout()
 	save(path=os.path.join(config.cdaw_path,"cdaw_pa"),verbose=True)
 
-cdaw_pa(df_cdaw)
 
 # Histogram of CDAW linear speeds
 def hi_geom_speeds(v,**kwargs):
@@ -193,22 +193,7 @@ def hicat_speeds_datetime(df_hicat):
 
 # Run All
 def run_all():
-	df_a = df_hicat[(df_hicat['SC']=='A')]
-	df_b = df_hicat[(df_hicat['SC']=='B')]
-
-	hicat_stacked_speeds()
-	
-	hi_geom_speeds(df_hicat[["FP speed [kms-1]"]],tit='FixedPhi')
-	
-	hicat_spc_speeds_pa(df_a,0)
-	hicat_spc_speeds_pa(df_b,1)
-	hicat_speeds_pa(df_hicat)
-
-	hicat_all_speeds(df_a[['FP speed [kms-1]']].values, df_b[['FP speed [kms-1]']].values,\
-                df_a[['SSE speed [kms-1]']].values, df_b[['SSE speed [kms-1]']].values,\
-                df_a[['HM speed [kms-1]']].values, df_b[['HM speed [kms-1]']].values,\
-                tit=["Fixed Phi","Self-Similar Expansion","Harmonic Mean"])
-
-	hicat_speeds_datetime(df_hicat)
+	cdaw_hists()
+	cdaw_pa()
 
 
