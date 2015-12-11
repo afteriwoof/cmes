@@ -102,7 +102,6 @@ def cdaw_speeds_pa():
 	plt.legend([q_f],['Quad. (final)'],prop={'size':ledge_sz})
 	save(path=os.path.join(config.cdaw_path,"cdaw_speeds_pa"),verbose=True)
 
-
 # Split speeds by year
 def cdaw_speeds_datetime():
 	import datetime
@@ -128,11 +127,12 @@ def cdaw_speeds_datetime():
 	#plt.legend([lin,q_f],['Linear','Quad. (final)'],prop={'size':ledge_sz})
 	save(path=os.path.join(config.cdaw_path,"cdaw_speeds_datetimes"),verbose=True)
 
-cdaw_speeds_datetime()
-
 # Run All
 def run_all():
 	cdaw_hists()
 	cdaw_pa()
 	cdaw_speeds_pa()
+	cdaw_speeds_datetime()
+
+
 
